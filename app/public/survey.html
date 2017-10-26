@@ -147,14 +147,87 @@
 
 <br>
 <br>
-<button type="submit" class="btn btn-primary btn-lg btn-block" id="submit">
+<button type="submit" data-target="modal1" class="btn btn-primary btn-lg btn-block" id="submit">
     Submit
     </button>
+<center><p><a href="/api/friendsArray">API Friends List</a> | <a href="https://github.com/rayjgarcia3/FriendFinder">GitHub Repo</a></p></center>
 
-
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>Meet your new best friend!</h4>
+        <h5 id="matchName"></h5>
+        <img id="matchPicture" src="" alt="No Image" width= 250px>
+    </div>   
+    
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close">Done</a> 
+    </div>    
+</div>
 
 
 <script type="text/javascript">
+
+$(document).ready(function() {
+ $("#submit").on("click", function(){
+
+        function validateForm() {
+          var isValid = true;
+          $('.validate').each(function() {
+            if ( $(this).val() === '' )
+                isValid = false;
+        }
+     });
+           $('.browser-default').each(function() {
+                if ($(this).val() === ""){
+                    isValid = false;
+                }
+            });
+
+           return isValid;
+}
+
+    if (validateForm() == true) {
+            var newFriend = {
+                name: $('#name').val().trim(),
+                profilePic: $('#photo').val().trim(),
+                scores: [
+                    $('#q1').val(),
+                    $('#q2').val(),
+                    $('#q3').val(),
+                    $('#q4').val(),
+                    $('#q5').val(),
+                    $('#q6').val(),
+                    $('#q7').val(),
+                    $('#q8').val(),
+                    $('#q9').val(),
+                    $('#q10').val(),
+                ]
+            };
+
+            var currentURL = window.location.origin;
+
+             $.post(currentURL + "/api/friends", newFriend, function(data) {
+                $("#matchName").text(data.name);
+                $("#matchPic").attr("src", data.profilePic);
+            });
+                $('.modal').modal();
+            $('#name').val("");
+            $('#photo').val("");
+            $('#q1').val("");
+            $('#q2').val("");
+            $('#q3').val("");
+            $('#q4').val("");
+            $('#q5').val("");
+            $('#q6').val("");
+            $('#q7').val("");
+            $('#q8').val("");
+            $('#q9').val("");
+            $('#q10').val("");
+        } else {
+            alert("Please fill out ALL fields before submitting survey!")
+        }
+    });
+});
 
 
 </script>
